@@ -1,7 +1,11 @@
+import express from 'express';
+
 import AppController from '../controllers/AppController';
 
-const express = require('express');
-
+/**
+ * Inject the router to the server.js
+ * @param {app}
+ */
 function apiRouter(app) {
   const router = express.Router();
 
