@@ -1,5 +1,5 @@
-const express = require('express');
-const { default: apiRouter } = require('./routes');
+import express from 'express';
+import apiRouter from './routes/index';
 
 const port = process.env.PORT || 5000;
 
