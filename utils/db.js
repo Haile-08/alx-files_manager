@@ -9,14 +9,14 @@ class DBClient {
    * Create a mongodb instance
    */
   constructor() {
-    const host = process.env.DB_HOST || "localhost";
+    const host = process.env.DB_HOST || 'localhost';
     const port = process.env.DB_PORT || 27017;
-    const database = process.env.DB_DATABASE || "files_manager";
+    const database = process.env.DB_DATABASE || 'files_manager';
     const dbUrl = `mongodb://${host}:${port}/${database}`;
 
     this.client = MongoClient(dbUrl, { useUnifiedTopology: true });
     this.client.connect();
-    }
+  }
 
   /**
    * check if the client is connected to mongodb
@@ -31,7 +31,7 @@ class DBClient {
    * @return {number} number of documents
    */
   async nbUsers() {
-    return this.client.db().collection("users").countDocuments();
+    return this.client.db().collection('users').countDocuments();
   }
 
   /**
@@ -39,7 +39,7 @@ class DBClient {
    * @return {number} number of documents
    */
   async nbFiles() {
-    return this.client.db().collection("files").countDocuments();
+    return this.client.db().collection('files').countDocuments();
   }
 }
 
