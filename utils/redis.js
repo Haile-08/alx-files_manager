@@ -5,7 +5,6 @@ import { promisify } from 'util';
  * Represnet a redis client
  */
 
-
 class RedisClient {
   /**
    * Create a redis instance
@@ -21,7 +20,7 @@ class RedisClient {
       this.isClientConnected = true;
     });
   }
-  
+
   /**
    * check if the client is connected to redis
    * @return {boolean} truen if connected false if not
