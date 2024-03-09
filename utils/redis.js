@@ -2,7 +2,7 @@
 import { createClient } from 'redis';
 import { promisify } from 'util';
 /**
- * Represnet a redis client
+ * Represent a redis client
  */
 
 class RedisClient {
@@ -23,7 +23,7 @@ class RedisClient {
 
   /**
    * check if the client is connected to redis
-   * @return {boolean} truen if connected false if not
+   * @return {boolean} true if connected false if not
    */
   isAlive() {
     return this.isClientConnected;
@@ -42,7 +42,7 @@ class RedisClient {
    * store a value with expiration time
    * @param {String} key the key value to store
    * @param {number} value the value to store
-   * @param {number} duation the time to exprie in second
+   * @param {number} duation the time to expire in second
    */
   async set(key, value, duration) {
     await this.client.SETEX(key, duration, value);
