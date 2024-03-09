@@ -11,12 +11,14 @@ class RedisClient {
    * Create a redis instance
    */
   constructor() {
+    this.isClientConnected = true;
     this.client = createClient();
     this.client.on('error', (err) => {
       console.error('Redis client failed to connect:', err.message || err.toString());
+      this.isClientConnected = false;
     });
     this.client.on('connect', () => {
-      // console.log('Redis client connected to the server');
+      this.isClientConnected = true;
     });
   }
   
@@ -25,7 +27,7 @@ class RedisClient {
    * @return {boolean} truen if connected false if not
    */
   isAlive() {
-    return this.client.connected;
+    return this.isClientConnected;
   }
 
   /**
@@ -34,11 +36,11 @@ class RedisClient {
    * @return {String | Object}
    */
   async get(key) {
-    return this.client.get(key)
+    return promisify(this.client.GET).bind(this.client)(key);
   }
 
   /**
-   * store a value with expriation time
+   * store a value with expiration time
    * @param {String} key the key value to store
    * @param {number} value the value to store
    * @param {number} duation the time to exprie in second
