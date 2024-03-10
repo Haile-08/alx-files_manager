@@ -1,8 +1,5 @@
 import sha1 from 'sha1';
-import Queue from 'bull';
 import dbClient from '../utils/db';
-
-const userQueue = new Queue('userQueue');
 
 class UsersController {
   /**
@@ -16,12 +13,12 @@ class UsersController {
 
     // check if there is an email value
     if (!email) {
-      return res.status(400).json('Missing email');
+      return res.status(400).json({ error: 'Missing email' });
     }
 
     // check if there is a password value
     if (!password) {
-      return res.status(400).json('Missing password');
+      return res.status(400).json({ error: 'Missing password' });
     }
 
     // find if email already exists
@@ -29,7 +26,7 @@ class UsersController {
 
     // check if email already exists
     if (emailExists) {
-      return res.status(400).json('Already exist');
+      return res.status(400).json({ error: 'Already exist' });
     }
 
     // hash the password
@@ -43,14 +40,8 @@ class UsersController {
         password: hashedPassword,
       });
     } catch (err) {
-      await userQueue.add({});
       return res.status(500).send({ error: 'Error creating user.' });
     }
-
-    // Add user to queue
-    await userQueue.add({
-      userId: user.insertedId.toString(),
-    });
 
     // response
     return res.status(201).json({
