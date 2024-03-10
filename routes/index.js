@@ -19,7 +19,7 @@ function apiRouter(app) {
   router.get('/stats', AppController.getStats);
 
   // post a new user
-  router.post('/users', UsersController.postNew)
+  router.post('/users', UsersController.postNew);
 }
 
 export default apiRouter;
