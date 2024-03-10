@@ -40,7 +40,7 @@ class UsersController {
 
     // response
     return res.status(201).json({
-      id: user._id,
+      id: user.insertedId.toString(),
       email,
     });
   }
