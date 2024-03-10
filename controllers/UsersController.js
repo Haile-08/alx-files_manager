@@ -1,5 +1,8 @@
 import sha1 from 'sha1';
+import Queue from 'bull/lib/queue';
 import dbClient from '../utils/db';
+
+const userQueue = new Queue('userQueue');
 
 class UsersController {
   /**
@@ -40,8 +43,14 @@ class UsersController {
         password: hashedPassword,
       });
     } catch (err) {
+      await userQueue.add({});
       return res.status(500).send({ error: 'Error creating user.' });
     }
+
+    // Add user to queue
+    await userQueue.add({
+      userId: user.insertedId.toString(),
+    });
 
     // response
     return res.status(201).json({
