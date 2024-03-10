@@ -33,10 +33,15 @@ class UsersController {
     const hashedPassword = sha1(password);
 
     // create the user
-    const user = await dbClient.usersCollection.insertOne({
-      email,
-      password: hashedPassword,
-    });
+    let user;
+    try {
+      user = await dbClient.usersCollection.insertOne({
+        email,
+        password: hashedPassword,
+      });
+    } catch (err) {
+      return res.status(500).send({ error: 'Error creating user.' });
+    }
 
     // response
     return res.status(201).json({
