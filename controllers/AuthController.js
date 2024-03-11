@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import sha1 from 'sha1';
 import redisClient from '../utils/redis';
 import dbClient from '../utils/db';
 
@@ -25,15 +26,20 @@ class AuthController {
     );
 
     // split the email from the password
-    const email = decodedCredentials.split(':')[0] || '';
+    const [email, password] = decodedCredentials.split(':');
 
-    // check if email exists
-    if (!email) {
+    // check if email exists and password
+    if (!email || !password) {
       return res.status(401).send({ error: 'Unauthorized' });
     }
 
+    const sha1Password = sha1(password);
+
     // find the user from the mongodb
-    const user = await dbClient.usersCollection.findOne({ email });
+    const user = await dbClient.usersCollection.findOne({
+      email,
+      password: sha1Password,
+    });
 
     // check if user exists
     if (!user) {
