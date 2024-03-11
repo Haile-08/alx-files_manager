@@ -23,7 +23,7 @@ function apiRouter(app) {
   router.post('/users', UsersController.postNew);
 
   // signing a user
-  router.get('/connect', AuthController.getConnect)
+  router.get('/connect', AuthController.getConnect);
 }
 
 export default apiRouter;
