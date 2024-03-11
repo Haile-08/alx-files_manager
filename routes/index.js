@@ -22,8 +22,14 @@ function apiRouter(app) {
   // post a new user
   router.post('/users', UsersController.postNew);
 
-  // signing a user
+  // sign-in a user
   router.get('/connect', AuthController.getConnect);
+
+  // sign-out a user
+  router.get('/disconnect', AuthController.getDisconnect);
+
+  // Retrieve the user
+  router.get('/users/me', UsersController.getMe)
 }
 
 export default apiRouter;
