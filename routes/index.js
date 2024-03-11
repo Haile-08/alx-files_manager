@@ -3,6 +3,7 @@ import express from 'express';
 import AppController from '../controllers/AppController';
 import UsersController from '../controllers/UsersController';
 import AuthController from '../controllers/AuthController';
+import FilesController from '../controllers/FilesController';
 
 /**
  * Inject the router to the server.js
@@ -30,6 +31,9 @@ function apiRouter(app) {
 
   // Retrieve the user
   router.get('/users/me', UsersController.getMe);
+
+  // create a new file in the db
+  router.post('/files', FilesController.postUpload);
 }
 
 export default apiRouter;
