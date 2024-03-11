@@ -2,6 +2,7 @@ import express from 'express';
 
 import AppController from '../controllers/AppController';
 import UsersController from '../controllers/UsersController';
+import AuthController from '../controllers/AuthController';
 
 /**
  * Inject the router to the server.js
@@ -20,6 +21,9 @@ function apiRouter(app) {
 
   // post a new user
   router.post('/users', UsersController.postNew);
+
+  // signing a user
+  router.get('/connect', AuthController.getConnect)
 }
 
 export default apiRouter;
