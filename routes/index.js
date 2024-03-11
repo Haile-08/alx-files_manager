@@ -29,7 +29,7 @@ function apiRouter(app) {
   router.get('/disconnect', AuthController.getDisconnect);
 
   // Retrieve the user
-  router.get('/users/me', UsersController.getMe)
+  router.get('/users/me', UsersController.getMe);
 }
 
 export default apiRouter;
