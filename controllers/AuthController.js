@@ -63,6 +63,10 @@ class AuthController {
     // extract the token
     const xToken = req.header('X-Token');
 
+    if (!xToken) {
+      return res.status(204).json();
+    }
+
     // remove the token from catch
     await redisClient.del(`auth_${xToken}`);
 
