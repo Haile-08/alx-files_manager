@@ -12,19 +12,31 @@ class FilesController {
    */
   static async postUpload(req, res) {
     // extract the token
-    const allowedTypes = ['folder', 'file', 'image']
     const xToken = req.header('X-Token');
+    const allowedTypes = ['folder', 'file', 'image']
     const {name, type, data, parentId = 0, isPublic = false} = req.body;
+
+
+    // get the user id from catch
+    const userId = await redisClient.get(`auth_${xToken}`);
+
+    // Get the user from mongodb using id
+    const user = await dbClient.usersCollection.findOne({ _id: new ObjectId(userId) });
+
+    // check if user exists
+    if (!user) {
+      return res.status(401).send({ error: 'Unauthorized' });
+    }
 
     if (!name) {
       return res.status(400).send({ error: 'Missing name' });
     }
 
     if (!type || !allowedTypes.includes(type)) {
-      return res.status(400).send({ error: 'Missing name' });
+      return res.status(400).send({ error: 'Missing type' });
     }
 
-    if (!data && type !== 'folder') {
+    if (!data && type != 'folder') {
       return res.status(400).send({ error: 'Missing data' });
     }
 
@@ -40,17 +52,6 @@ class FilesController {
       if(file.type !== 'folder') {
         return res.status(400).send({ error: 'Parent is not a folder' });
       }
-    }
-
-    // get the user id from catch
-    const userId = await redisClient.get(`auth_${xToken}`);
-
-    // Get the user from mongodb using id
-    const user = await dbClient.usersCollection.findOne({ _id: new ObjectId(userId) });
-
-    // check if user exists
-    if (!user) {
-      return res.status(401).send({ error: 'Unauthorized' });
     }
 
     const query = {
