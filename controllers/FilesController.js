@@ -78,6 +78,7 @@ class FilesController {
       }
 
       query.localPath = path;
+      query.data = data;
 
     }
     const file = await dbClient.filesCollection.insertOne(query);
