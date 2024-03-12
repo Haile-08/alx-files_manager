@@ -34,6 +34,12 @@ function apiRouter(app) {
 
   // create a new file in the db
   router.post('/files', FilesController.postUpload);
+
+  // retrieve a file using id
+  router.get('/files/:id', FilesController.getShow);
+
+  // retrieve all users
+  router.get('/files', FilesController.getIndex)
 }
 
 export default apiRouter;

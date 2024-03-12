@@ -78,7 +78,6 @@ class FilesController {
       }
 
       query.localPath = path;
-      query.data = data;
 
     }
     const file = await dbClient.filesCollection.insertOne(query);
@@ -91,6 +90,59 @@ class FilesController {
         parentId: file.ops[0].parentId,
     }
     return res.status(201).json(result);
+  }
+
+  static async getShow(req, res) {
+    const id = req.params.id;
+    const xToken = req.header('X-Token');
+
+    // get the user id from catch
+    const userId = await redisClient.get(`auth_${xToken}`);
+
+    // Get the user from mongodb using id
+    const user = await dbClient.usersCollection.findOne({ _id: new ObjectId(userId) });
+
+    // check if user exists
+    if (!user) {
+      return res.status(401).send({ error: 'Unauthorized' });
+    }
+
+    const file = dbClient.filesCollection.findOne({
+      _id: new ObjectId(id),
+      userId: user._id.toString(),
+    })
+
+    if (!file) {
+      return res.status(404).json({ error: 'Not found' });
+    }
+
+    return res.status(200).json({
+      id,
+      userId,
+      name: file.name,
+      type: file.type,
+      isPublic: file.isPublic,
+      parentId: file.parentId === ROOT_FOLDER_ID.toString()
+        ? 0
+        : file.parentId.toString(),
+    });
+  }
+
+  static async getIndex(req, res) {
+    const xToken = req.header('X-Token');
+
+    // get the user id from catch
+    const userId = await redisClient.get(`auth_${xToken}`);
+
+    // Get the user from mongodb using id
+    const user = await dbClient.usersCollection.findOne({ _id: new ObjectId(userId) });
+
+    // check if user exists
+    if (!user) {
+      return res.status(401).send({ error: 'Unauthorized' });
+    }
+
+    
   }
 }
 
